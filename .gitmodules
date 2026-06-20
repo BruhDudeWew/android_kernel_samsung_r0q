@@ -1,0 +1,7 @@
+[submodule "susfs4ksu"]
+	path = susfs4ksu
+	url = https://gitlab.com/simonpunk/susfs4ksu.git
+	branch = gki-android12-5.10
+[submodule "KernelSU"]
+	path = KernelSU
+	url = https://github.com/tiann/KernelSU.git
