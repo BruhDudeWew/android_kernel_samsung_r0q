@@ -385,7 +385,7 @@ static void gs_rx_push(struct work_struct *work)
 
 		default:
 			/* presumably a transient fault */
-			pr_warn("ttyGS%d: unexpected RX status %d\n",
+			pr_debug("ttyGS%d: unexpected RX status %d\n",
 				port->port_num, req->status);
 			fallthrough;
 		case 0:
@@ -548,6 +548,11 @@ static int gs_start_io(struct gs_port *port)
 	 * configurations may use different endpoints with a given port;
 	 * and high speed vs full speed changes packet sizes too.
 	 */
+	if (!ep->enabled || !port->port_usb->in->enabled) {
+		pr_err("%s: ep is disabled.\n", __func__);
+		return -ENODEV;
+	}
+
 	status = gs_alloc_requests(ep, head, gs_read_complete,
 		&port->read_allocated);
 	if (status)
@@ -1395,6 +1400,7 @@ void gserial_disconnect(struct gserial *gser)
 
 	port->port_usb = NULL;
 	gser->ioport = NULL;
+	pr_err("%s: gser->ioport is NULL.\n", __func__);
 	if (port->port.count > 0) {
 		wake_up_interruptible(&port->drain_wait);
 		if (port->port.tty)

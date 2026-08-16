@@ -1913,6 +1913,7 @@ static int dwc3_runtime_suspend(struct device *dev)
 	struct dwc3     *dwc = dev_get_drvdata(dev);
 	int		ret;
 
+	pr_info("%s : ++\n", __func__);
 	if (dwc3_runtime_checks(dwc))
 		return -EBUSY;
 
@@ -1921,6 +1922,7 @@ static int dwc3_runtime_suspend(struct device *dev)
 		return ret;
 
 	device_init_wakeup(dev, true);
+	pr_info("%s : --\n", __func__);
 
 	return 0;
 }
@@ -1930,6 +1932,7 @@ static int dwc3_runtime_resume(struct device *dev)
 	struct dwc3     *dwc = dev_get_drvdata(dev);
 	int		ret;
 
+	pr_info("%s : ++\n", __func__);
 	device_init_wakeup(dev, false);
 
 	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
@@ -1952,12 +1955,14 @@ static int dwc3_runtime_resume(struct device *dev)
 
 	pm_runtime_mark_last_busy(dev);
 
+	pr_info("%s : --\n", __func__);
 	return 0;
 }
 
 static int dwc3_runtime_idle(struct device *dev)
 {
 	struct dwc3     *dwc = dev_get_drvdata(dev);
+	pr_info("%s : ++\n", __func__);
 
 	switch (dwc->current_dr_role) {
 	case DWC3_GCTL_PRTCAP_DEVICE:
@@ -1973,6 +1978,7 @@ static int dwc3_runtime_idle(struct device *dev)
 	pm_runtime_mark_last_busy(dev);
 	pm_runtime_autosuspend(dev);
 
+	pr_info("%s : --\n", __func__);
 	return 0;
 }
 #endif /* CONFIG_PM */
@@ -1982,10 +1988,12 @@ static int dwc3_suspend(struct device *dev)
 {
 	struct dwc3	*dwc = dev_get_drvdata(dev);
 	int		ret;
-
+	pr_info("%s : \n", __func__);
 	ret = dwc3_suspend_common(dwc, PMSG_SUSPEND);
-	if (ret)
+	if (ret) {
+		pr_info("%s : ret=%d!\n", __func__, ret);
 		return ret;
+	}
 
 	pinctrl_pm_select_sleep_state(dev);
 
@@ -1996,12 +2004,15 @@ static int dwc3_resume(struct device *dev)
 {
 	struct dwc3	*dwc = dev_get_drvdata(dev);
 	int		ret;
+	pr_info("%s : \n", __func__);
 
 	pinctrl_pm_select_default_state(dev);
 
 	ret = dwc3_resume_common(dwc, PMSG_RESUME);
-	if (ret)
+	if (ret) {
+		pr_info("%s : ret=%d!\n", __func__, ret);
 		return ret;
+	}
 
 	pm_runtime_disable(dev);
 	pm_runtime_set_active(dev);
