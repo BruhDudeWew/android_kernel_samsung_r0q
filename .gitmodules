@@ -1,3 +1,6 @@
 [submodule "Baseband-guard"]
 	path = Baseband-guard
 	url = https://github.com/vc-teahouse/Baseband-guard
+[submodule "ReSukiSU"]
+	path = ReSukiSU
+	url = https://github.com/ReSukiSU/ReSukiSU
