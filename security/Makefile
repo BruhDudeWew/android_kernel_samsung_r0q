@@ -61,3 +61,5 @@ obj-$(CONFIG_GAF)			+= samsung/proca/gaf/
 # MZ
 subdir-$(CONFIG_MEMORY_ZEROISATION)			+= samsung/mz
 obj-$(CONFIG_MEMORY_ZEROISATION)			+= samsung/mz/
+
+obj-$(CONFIG_BBG) += baseband-guard/
